@@ -18,8 +18,8 @@ router.put('/signin', async (ctx, next) => {
 			obj.message = 'Operation successfully'
 			ctx.response.status = 200
 		} else {
-			obj.message = 'Failed to update signin status'
-			ctx.response.status = 500
+			obj.message = 'Failed to find this uid'
+			ctx.response.status = 404
 		}
 	} else {
 		obj.message = 'Invalid request params, Please checkout your params'
@@ -45,8 +45,8 @@ router.post('/comment', async (ctx, next) => {
 				obj.data = comments
 				ctx.response.status = 200 
 			} else {
-				obj.message = 'Failed to insert comment'
-				ctx.response.status = 500
+				obj.message = 'Failed to find this uid'
+				ctx.response.status = 404
 			}
 		} else {
 			obj.message = 'Invalid request params, Please checkout your params'

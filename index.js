@@ -2,6 +2,7 @@ const Koa = require('koa')
 const logger = require('koa-logger')
 const bodyParser = require('koa-bodyparser')
 const mongoose = require('mongoose')
+const cors = require('koa2-cors')
 
 mongoose.connect('mongodb://localhost/lugedemo', function(err, db) {
 	if (!err) {
@@ -38,6 +39,14 @@ app.use(bodyParser({
 	onerror(error, ctx) {
 		ctx.throw(400, `cannot parse request body, ${JSON.stringify(error)}`)
 	}
+}))
+app.use(cors({
+	origin: '*',
+	exposeHeaders: ['WWW-Authenticate', 'Server-Authorization'],
+	maxAge: 3600 * 24,
+	credentials: false,
+	allowMethods: ['GET', 'POST', 'PUT'],
+	allowHeaders: ['Content-Type', 'Authorization', 'Accept'],
 }))
 app.use(router.routes())
 app.use(router.allowedMethods())
