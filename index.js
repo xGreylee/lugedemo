@@ -41,7 +41,12 @@ app.use(bodyParser({
 	}
 }))
 app.use(cors({
-	origin: '*',
+	origin: function(ctx) {
+		if (ctx.request.url === '/test') {
+			return '*'
+		}
+		return 'http://192.168.1.103:5000'
+	},
 	exposeHeaders: ['WWW-Authenticate', 'Server-Authorization'],
 	maxAge: 3600 * 24,
 	allowMethods: ['GET', 'POST', 'PUT'],
