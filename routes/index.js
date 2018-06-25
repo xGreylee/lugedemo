@@ -10,7 +10,7 @@ router.get('/', async (ctx, next) => {
 	ctx.response.body = 'hello world'
 })
 
-router.put('/signin', async (ctx, next) => {
+router.put('/api/signin', async (ctx, next) => {
 	const obj = {}
 	if (_.has(ctx.request.body, 'uid') && _.size(ctx.request.body) === 1) {
 		const rs = await User.findOneAndUpdate({ uid: ctx.request.body.uid }, { $set: { is_signin: 1 }})
@@ -33,7 +33,7 @@ router.put('/signin', async (ctx, next) => {
 	await next()
 })
 
-router.post('/comment', async (ctx, next) => {
+router.post('/api/comment', async (ctx, next) => {
 	const obj = {}
 	const pick_obj = _.pick(ctx.request.body, ['uid', 'content'])
 	if (_.isNumber(ctx.request.body.uid) && _.isString(ctx.request.body.content)) {
@@ -64,7 +64,7 @@ router.post('/comment', async (ctx, next) => {
 	await next()
 })
 
-router.get('/checked_in', async (ctx, next) => {
+router.get('/api/checked_in', async (ctx, next) => {
 	const obj = {}
 	let users = null
 	if (_.has(ctx.query, 'lasttime') && _.size(ctx.query) === 1) {
@@ -88,7 +88,7 @@ router.get('/checked_in', async (ctx, next) => {
 	await next()
 })
 
-router.get('/comments', async (ctx, next) => {
+router.get('/api/comments', async (ctx, next) => {
 	const obj = {}
 	let comments = null
 	if (_.has(ctx.query, 'lasttime') && _.size(ctx.query) === 1) {
