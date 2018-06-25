@@ -47,6 +47,7 @@ app.use(cors({
 		}
 		return 'http://192.168.1.103:5000'
 	},
+	credentials: true,
 	exposeHeaders: ['WWW-Authenticate', 'Server-Authorization'],
 	maxAge: 3600 * 24,
 	allowMethods: ['GET', 'POST', 'PUT'],
