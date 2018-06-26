@@ -7,7 +7,7 @@ const User = mongoose.model('User')
 const Comment = mongoose.model('Comment')
 
 router.get('/', async (ctx, next) => {
-	ctx.redirect(`/invitation.html?uid=${ctx.request.query.uid}`)
+	ctx.redirect(`/invitation.html?uid=${ctx.query.uid}`)
 	ctx.status = 301
 	await next()
 })
@@ -36,7 +36,7 @@ router.put('/api/signin', async (ctx, next) => {
 })
 
 router.get('/comment', async (ctx, next) => {
-	ctx.redirect(`/comment.html?uid=${ctx.request.query.uid}`)
+	ctx.redirect(`/comment?uid=${ctx.query.uid}`)
 	ctx.status = 301
 	await next()
 })
@@ -45,7 +45,7 @@ router.post('/api/comment', async (ctx, next) => {
 	const obj = {}
 	const uid = (_.split(ctx.request.header.referer, '='))[1]
 	if (_.has(ctx.request.body, 'content') && _.size(ctx.request.body) === 1) {
-		const user = await User.findOne({ uid: Number(ctx.request.query.uid) })
+		const user = await User.findOne({ uid: Number(uid) })
 		if (user !== null) {
 			const comment = new Comment({
 				uid,
