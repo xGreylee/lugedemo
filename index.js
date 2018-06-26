@@ -2,6 +2,8 @@ const Koa = require('koa')
 const logger = require('koa-logger')
 const bodyParser = require('koa-bodyparser')
 const mongoose = require('mongoose')
+const path = require('path')
+const staticCache = require('koa-static-cache')
 const cors = require('koa2-cors')
 const serve = require('koa-static')
 
@@ -25,6 +27,11 @@ app.on('error', function (err) {
 })
 
 app.use(serve(__dirname + '/views'))
+app.use(staticCache(path.join(__dirname, 'views'), {
+	maxAge: 120 * 24 * 60 * 60,
+	dynamic: true,
+	preload: true
+}))
 app.use(logger())
 app.use(async (ctx, next) => {
 	try {
