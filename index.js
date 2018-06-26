@@ -31,12 +31,6 @@ app.on('error', function (err) {
 app.use(serve(__dirname + '/views'))
 app.use(conditional())
 app.use(etag())
-app.use(async (ctx, next) => {
-	if (ctx.fresh) {
-		ctx.status = 304
-	}
-	await next()
-})
 app.use(staticCache(path.join(__dirname, 'views'), {
 	maxAge: 120 * 24 * 60 * 60,
 	dynamic: true,

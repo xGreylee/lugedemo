@@ -8,7 +8,13 @@ const Comment = mongoose.model('Comment')
 
 router.get('/', async (ctx, next) => {
 	ctx.redirect(`/invitation.html?uid=${ctx.query.uid}`)
-	ctx.status = 301
+	const etag = ctx.response.get('ETag')
+	console.log(`etag: ${etag}`)
+	if (ctx.fresh) {
+		ctx.status = 304
+	} else {
+		ctx.status = 301
+	}
 	await next()
 })
 
