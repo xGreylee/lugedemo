@@ -75,7 +75,7 @@
         function main() {
             const query = parseQuery(location.search);
             new QRCode(document.getElementById("qrcode"), {
-                text: `${location.origin}/comment?uid=${query.uid}`,
+                text: `${location.origin}/api/comment?uid=${query.uid}`,
                 correctLevel : QRCode.CorrectLevel.M,
             });
         }
