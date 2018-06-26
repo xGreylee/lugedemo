@@ -7,8 +7,10 @@ const User = mongoose.model('User')
 const Comment = mongoose.model('Comment')
 
 router.get('/', async (ctx, next) => {
-	ctx.status = 200
-	ctx.redirect('/invitation.html')
+	console.log(ctx.query.uid)
+	ctx.redirect(`/invitation.html?uid=${ctx.query.uid}`)
+	ctx.status = 301
+	await next()
 })
 
 router.put('/api/signin', async (ctx, next) => {
@@ -36,17 +38,25 @@ router.put('/api/signin', async (ctx, next) => {
 
 router.post('/api/comment', async (ctx, next) => {
 	const obj = {}
-	const pick_obj = _.pick(ctx.request.body, ['uid', 'content'])
-	if (_.isNumber(ctx.request.body.uid) && _.isString(ctx.request.body.content)) {
-		if (_.size(pick_obj) === 2) {
-			const comment = new Comment(ctx.request.body)
-			const comments = await comment.save()
-			if (comments !== null) {
-				obj.message = 'Operation successfully'
-				obj.data = comments
-				ctx.response.status = 200 
+	if (ctx.request.query.uid) {
+		if (_.has(ctx.request.body, 'content') && _.size(ctx.request.body) === 1) {
+			const user = await User.findOne({ uid: Number(ctx.request.query.uid) })
+			if (user !== null) {
+				const comment = new Comment({
+					uid: ctx.request.query.uid,
+					content: ctx.request.body.content
+				})
+				const comments = await comment.save()
+				if (comments !== null) {
+					obj.message = 'Operation successfully'
+					obj.data = comments
+					ctx.response.status = 200 
+				} else {
+					obj.message = 'Failed to find this uid'
+					ctx.response.status = 404
+				}
 			} else {
-				obj.message = 'Failed to find this uid'
+				obj.message = 'cannot find this uid in db'
 				ctx.response.status = 404
 			}
 		} else {
@@ -54,7 +64,7 @@ router.post('/api/comment', async (ctx, next) => {
 			ctx.response.status = 400
 		}
 	} else {
-		obj.message = 'Invalid type of params'
+		obj.message = 'cannot get query uid'
 		ctx.response.status = 400
 	}
 	ctx.response.body = {
