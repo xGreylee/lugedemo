@@ -35,42 +35,37 @@ router.put('/api/signin', async (ctx, next) => {
 	await next()
 })
 
-router.get('/api/comment', async (ctx, next) => {
+router.get('/comment', async (ctx, next) => {
 	ctx.redirect(`/comment.html?uid=${ctx.request.query.uid}`)
 	ctx.status = 301
 	await next()
 })
 
 router.post('/api/comment', async (ctx, next) => {
-	console.log(ctx.request.query.uid)
+	console.log(ctx.request)
 	const obj = {}
-	if (ctx.request.query.uid) {
-		if (_.has(ctx.request.body, 'content') && _.size(ctx.request.body) === 1) {
-			const user = await User.findOne({ uid: Number(ctx.request.query.uid) })
-			if (user !== null) {
-				const comment = new Comment({
-					uid: ctx.request.query.uid,
-					content: ctx.request.body.content
-				})
-				const comments = await comment.save()
-				if (comments !== null) {
-					obj.message = 'Operation successfully'
-					obj.data = comments
-					ctx.response.status = 200 
-				} else {
-					obj.message = 'Failed to find this uid'
-					ctx.response.status = 404
-				}
+	if (_.has(ctx.request.body, 'content') && _.size(ctx.request.body) === 1) {
+		const user = await User.findOne({ uid: Number(ctx.request.query.uid) })
+		if (user !== null) {
+			const comment = new Comment({
+				uid: ctx.request.query.uid,
+				content: ctx.request.body.content
+			})
+			const comments = await comment.save()
+			if (comments !== null) {
+				obj.message = 'Operation successfully'
+				obj.data = comments
+				ctx.response.status = 200 
 			} else {
-				obj.message = 'cannot find this uid in db'
+				obj.message = 'Failed to find this uid'
 				ctx.response.status = 404
 			}
 		} else {
-			obj.message = 'Invalid request params, Please checkout your params'
-			ctx.response.status = 400
+			obj.message = 'cannot find this uid in db'
+			ctx.response.status = 404
 		}
 	} else {
-		obj.message = 'cannot get query uid'
+		obj.message = 'Invalid request params, Please checkout your params'
 		ctx.response.status = 400
 	}
 	ctx.response.body = {

@@ -47,7 +47,7 @@ app.use(cors({
 		if (ctx.request.url === '/test') {
 			return '*'
 		}
-		return 'http://192.168.1.103:5000'
+		return 'http://localhost:8080'
 	},
 	credentials: true,
 	exposeHeaders: ['WWW-Authenticate', 'Server-Authorization'],

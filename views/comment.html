@@ -118,6 +118,7 @@
             e.preventDefault();
             const content = document.getElementById('wish').value;
             const uid = parseInt(document.getElementById('uid').value);
+            console.log('uid:', uid)
             fetch('//120.79.166.11:8080/api/comment', {
                 credentials: 'include',
                 method: 'POST',
