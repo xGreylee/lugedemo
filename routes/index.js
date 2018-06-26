@@ -42,13 +42,13 @@ router.get('/comment', async (ctx, next) => {
 })
 
 router.post('/api/comment', async (ctx, next) => {
-	console.log(ctx.request)
 	const obj = {}
+	const uid = (_.split(ctx.request.header.referer, '='))[1]
 	if (_.has(ctx.request.body, 'content') && _.size(ctx.request.body) === 1) {
 		const user = await User.findOne({ uid: Number(ctx.request.query.uid) })
 		if (user !== null) {
 			const comment = new Comment({
-				uid: ctx.request.query.uid,
+				uid,
 				content: ctx.request.body.content
 			})
 			const comments = await comment.save()
