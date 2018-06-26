@@ -44,9 +44,7 @@ router.get('/comment', async (ctx, next) => {
 router.post('/api/comment', async (ctx, next) => {
 	const obj = {}
 	console.log(`ctx.request.body: ${JSON.stringify(ctx.request.body)}`)
-	console.log(`ctx.query: ${JSON.stringify(ctx.query)}`)
-	// const uid = (_.split(ctx.request.header.referer, '='))[1]
-	if (_.has(ctx.request.body, 'content')) {
+	if (_.has(ctx.request.body, 'content') && _.size(ctx.request.body) === 2) {
 		const user = await User.findOne({ uid: Number(ctx.request.body.uid) })
 		if (user !== null) {
 			const comment = new Comment({

@@ -6,6 +6,8 @@ const path = require('path')
 const staticCache = require('koa-static-cache')
 const cors = require('koa2-cors')
 const serve = require('koa-static')
+const conditional = require('koa-conditional-get')
+const etag = require('koa-etag')
 
 mongoose.connect('mongodb://localhost/lugedemo', function(err, db) {
 	if (!err) {
@@ -27,6 +29,14 @@ app.on('error', function (err) {
 })
 
 app.use(serve(__dirname + '/views'))
+app.use(conditional())
+app.use(etag())
+app.use(async (ctx, next) => {
+	if (ctx.fresh) {
+		ctx.status = 304
+	}
+	await next()
+})
 app.use(staticCache(path.join(__dirname, 'views'), {
 	maxAge: 120 * 24 * 60 * 60,
 	dynamic: true,
