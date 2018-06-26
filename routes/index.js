@@ -36,7 +36,7 @@ router.put('/api/signin', async (ctx, next) => {
 })
 
 router.get('/comment', async (ctx, next) => {
-	ctx.redirect(`/comment?uid=${ctx.query.uid}`)
+	ctx.redirect(`/comment.html?uid=${ctx.query.uid}`)
 	ctx.status = 301
 	await next()
 })
