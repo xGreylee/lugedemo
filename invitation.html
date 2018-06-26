@@ -1,0 +1,126 @@
+<html lang="zh-cn">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>婚宴邀请函</title>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-position: center;
+            background-image: url('./marble-texture.png');
+            position: relative;
+        }
+        .corner-pattern {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+        .top-left, .bottom-right {
+            position: absolute;
+            width: 75%;
+            max-width: 600px;
+        }
+        .top-left {
+            top: 0;
+            left: 0;
+        }
+        .bottom-right {
+            bottom: 0;
+            right: 0;
+            transform: rotate(180deg);
+        }
+        .main {
+            display: flex;
+            height: 100%;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 1;
+            position: relative;
+        }
+        .content {
+            width: 80%;
+            max-width: 560px;
+            position: relative;
+        }
+        .content img {
+            max-width: 100%;
+            height: auto;
+        }
+        .pattern-middle {
+            position: absolute;
+            right: 5%;
+            top: 2%;
+            width: 30%;
+        }
+        .qrcode-sec {
+            text-align: center;
+            position: absolute;
+            width: 100%;
+            bottom: 8%;
+            color: #544e43;
+            font-size: calc(10px + 2 * ((100vw - 320px) / 680));
+        }
+        .qrcode-sec p {
+            margin: 0 0 8px;
+        }
+        #qrcode {
+            margin: 8px 0;
+        }
+        #qrcode img {
+            margin: auto;
+            height: auto;
+            width: 30%;
+        }
+    </style>
+</head>
+
+<body>
+    <section class="corner-pattern">
+        <img class="top-left" src="./flower-pattern-top.png">
+        <img class="bottom-right" src="./flower-pattern-top.png">
+    </section>
+    <section class="main">
+        <div class="content">
+            <img class="pattern-middle" src="./flower-pattern-middle.png" alt="">
+            <img src="./content.png" alt="">
+            
+            <section class="qrcode-sec">
+                <div id="qrcode"></div>
+                <p>长按二维码留言</p>
+            </section>
+        </div>
+    </section>
+
+    <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.js"></script>
+    <script>
+        function parseQuery(qstr) {
+            const query = {}
+            const target = (qstr[0] === '?' ? qstr.substr(1) : qstr).split('&')
+            for (let i = 0; i < target.length; i++) {
+                let b = target[i].split('=')
+                query[decodeURIComponent(b[0])] = decodeURIComponent(b[1] || '')
+            }
+            return query
+        }
+
+        function main() {
+            const query = parseQuery(location.search);
+            new QRCode(document.getElementById("qrcode"), {
+                text: `${location.origin}/comment?uid=${query.uid}`,
+                colorDark: '#544e43',
+                correctLevel : QRCode.CorrectLevel.M,
+            });
+        }
+
+        window.addEventListener('load', function() {
+            main();
+        })
+    </script>
+</body>
+
+</html>

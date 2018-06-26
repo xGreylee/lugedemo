@@ -1,0 +1,89 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>婚宴邀请函</title>
+
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+        body {
+            width: 100%;
+            background-image: url('./invitation.png');
+            background-size: contain;
+            background-position: center center;
+            background-repeat: no-repeat;
+        }
+        .qrcode-sec {
+            font-size: 0;
+            width: 60%;
+            display: flex;
+            margin-top: -5vh;
+            flex-direction: column;
+            justify-content: center;
+        }
+        #qrcode {
+            margin: 3em 0 1em;
+        }
+        #qrcode img {
+            height: auto;
+            width: 100%;
+            max-width: 560px;
+            margin: auto;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- <section class="header">
+        <h1>邀请函</h1>
+    </section>
+
+    <section class="main-content">
+        <p class="">兄弟您好啊，本人郭泉禄兹定于
+            <span class="time-desc">2018年7月3日下午6时</span>与xxx举行结婚典礼，诚挚邀请您携家人到场，谢谢您的祝愿。
+        </p>
+
+        <div class="location-desc">地点：珠海度假村酒店星光会议中心，二楼星韵厅</div>
+    </section> -->
+
+    <section class="qrcode-sec">
+        <div id="qrcode"></div>
+        <!-- <p>长按识别二维码签到</p> -->
+    </section>
+
+    <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.js"></script>
+    <script>
+        function parseQuery(qstr) {
+            const query = {}
+            const target = (qstr[0] === '?' ? qstr.substr(1) : qstr).split('&')
+            for (let i = 0; i < target.length; i++) {
+                let b = target[i].split('=')
+                query[decodeURIComponent(b[0])] = decodeURIComponent(b[1] || '')
+            }
+            return query
+        }
+
+        function main() {
+            const query = parseQuery(location.search);
+            new QRCode(document.getElementById("qrcode"), {
+                text: `${location.origin}/comment?uid=${query.uid}`,
+                correctLevel : QRCode.CorrectLevel.M,
+            });
+        }
+
+        window.addEventListener('load', function() {
+            main();
+        })
+    </script>
+</body>
+
+</html>
