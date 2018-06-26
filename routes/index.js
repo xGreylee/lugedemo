@@ -35,6 +35,12 @@ router.put('/api/signin', async (ctx, next) => {
 	await next()
 })
 
+router.get('/api/comment', async (ctx, next) => {
+	ctx.redirect(`/comment.html?uid=${ctx.query.uid}`)
+	ctx.status = 301
+	await next()
+})
+
 router.post('/api/comment', async (ctx, next) => {
 	const obj = {}
 	if (ctx.request.query.uid) {
