@@ -7,7 +7,8 @@ const User = mongoose.model('User')
 const Comment = mongoose.model('Comment')
 
 router.get('/', async (ctx, next) => {
-	ctx.response.body = 'hello world'
+	ctx.status = 200
+	ctx.redirect('/invitation.html')
 })
 
 router.put('/api/signin', async (ctx, next) => {

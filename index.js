@@ -3,6 +3,7 @@ const logger = require('koa-logger')
 const bodyParser = require('koa-bodyparser')
 const mongoose = require('mongoose')
 const cors = require('koa2-cors')
+const serve = require('koa-static')
 
 mongoose.connect('mongodb://localhost/lugedemo', function(err, db) {
 	if (!err) {
@@ -23,6 +24,7 @@ app.on('error', function (err) {
 	console.error(err)
 })
 
+app.use(serve(__dirname + '/views'))
 app.use(logger())
 app.use(async (ctx, next) => {
 	try {
