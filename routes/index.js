@@ -7,7 +7,6 @@ const User = mongoose.model('User')
 const Comment = mongoose.model('Comment')
 
 router.get('/', async (ctx, next) => {
-	console.log(ctx.query.uid)
 	ctx.redirect(`/invitation.html?uid=${ctx.query.uid}`)
 	ctx.status = 301
 	await next()
