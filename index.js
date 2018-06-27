@@ -52,7 +52,7 @@ app.use(cors({
 		if (ctx.request.url === '/test') {
 			return '*'
 		}
-		return 'http://localhost:8080'
+		return 'http://www.76wedding.cn'
 	},
 	credentials: true,
 	exposeHeaders: ['WWW-Authenticate', 'Server-Authorization'],
