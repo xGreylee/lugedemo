@@ -5,7 +5,7 @@ const mongoose = require('mongoose')
 const path = require('path')
 const staticCache = require('koa-static-cache')
 const cors = require('koa2-cors')
-const serve = require('koa-static')
+// const serve = require('koa-static')
 
 mongoose.connect('mongodb://localhost/lugedemo', function(err, db) {
 	if (!err) {
@@ -27,11 +27,9 @@ app.on('error', function (err) {
 })
 
 app.use(staticCache(path.join(__dirname, 'views'), {
-	maxAge: 120 * 24 * 60 * 60,
-	// dynamic: true,
-	// preload: true
+	maxAge: 120 * 24 * 60 * 60
 }))
-app.use(serve(__dirname + '/views'))
+// app.use(serve(__dirname + '/views'))
 app.use(logger())
 app.use(async (ctx, next) => {
 	try {
