@@ -1,0 +1,79 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>祝福弹幕</title>
+
+    <style>
+        html,
+        body,
+        #bg {
+            height: 100%;
+        }
+
+        body {
+            background-color: black;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+        }
+
+        #bg {
+            position: absolute;
+            width: 100%;
+            z-index: -1;
+            background-image: url('./danmuku-bg.png');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
+        }
+
+        #bg.loading {
+            will-change: opacity;
+            animation: fading 3000ms ease-in-out infinite forwards;
+        }
+
+        #danmuku-player {
+            height: 90%;
+            width: 100%;
+        }
+
+        .wish-board .cmt .text {
+            color: #FFF;
+            display: inline-block;
+            background: rgba(255, 255, 255, .7);
+            border: 2px solid #FFF;
+            padding: 0.15em 1em;
+            border-radius: 40px;
+            vertical-align: middle;
+            text-shadow: 1px 1px 1px #333;
+        }
+    </style>
+    <link rel="stylesheet" href="./barrage.css">
+</head>
+
+<body>
+    <div id="bg" class="loading"></div>
+
+    <section class="abp" id="danmuku-player">
+        <div id="commentCanvas" class="container wish-board"></div>
+    </section>
+
+    <script src="https://cdn.bootcss.com/d3/4.13.0/d3.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/comment-core-library@0.9.3/build/CommentCoreLibrary.min.js"></script>
+    <script src="https://cdn.bootcss.com/rxjs/5.5.11/Rx.min.js"></script>
+    <script src="./barrage.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const app = barrageApp();
+
+            app.init();
+        })
+    </script>
+</body>
+
+</html>

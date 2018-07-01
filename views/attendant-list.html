@@ -1,0 +1,113 @@
+<html lang="zh-cn">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>签到云</title>
+    <style>
+        @keyframes fading {
+            0% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.5;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+
+        html,
+        body,
+        #bg {
+            height: 100%;
+        }
+
+        body {
+            background-color: black;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #bg {
+            position: absolute;
+            width: 100%;
+            z-index: -1;
+            background-image: url('./icon-graph-bg.png');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
+        }
+
+        #bg.loading {
+            will-change: opacity;
+            animation: fading 3000ms ease-in-out infinite forwards;
+        }
+
+        #canvas {
+            height: calc(100% - 10px);
+            width: calc(100% - 10px);
+        }
+
+        .attendant-name {
+            font-size: 3em;
+            margin-bottom: 0.15em;
+            display: block;
+            background-color: #26bcff;
+            border-radius: 5px;
+            padding: 0.15em 0.3em;
+            box-shadow: 1px 1px 30px 5px #000;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="bg" class="loading"></div>
+    <svg id="canvas"></svg>
+
+    <script src="https://cdn.bootcss.com/d3/4.13.0/d3.min.js"></script>
+    <script src="https://cdn.bootcss.com/d3-tip/0.9.1/d3-tip.min.js"></script>
+    <script src="./attendant-graph.js"></script>
+    <script>
+        const app = graphApp();
+
+        function fetchWithParams(path, params, fetchOpts, BASE_URL = location.origin) {
+            var url = new URL(`${BASE_URL}${path}`)
+            if (params) Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
+            return fetch(url, fetchOpts)
+                .then((res) => res.json())
+                .catch((ex) => console.log("Fetch Exception", ex));
+        };
+
+        const data = [];
+        let lastRequestTimeStamp = 0;
+
+        process();
+
+        function process() {
+            fetchWithParams('/api/checked_in', { lasttime: lastRequestTimeStamp })
+                .then(res => {
+                    if (res.data.length) {
+                        lastRequestTimeStamp = tempStamp;
+                        document.getElementById('bg').classList.remove('loading');
+                        data.push(...res.data);
+                        if (!app.started) {
+                            app.init(data);
+                        } else {
+                            app.updateData(data);
+                        }
+                    }
+                    setTimeout(process, 1000 * 10)
+                })
+            const tempStamp = Date.now();
+            console.log('requested');
+        }
+    </script>
+</body>
+
+</html>
