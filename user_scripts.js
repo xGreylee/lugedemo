@@ -14,18 +14,10 @@ const MongoClient = require('mongodb').MongoClient;
 				avatar: row.values[3],
 				is_signin: row.values[4],
 				signin_time: row.values[5],
+				is_shown: row.values[6]
 			}
 			await db.collection('users').insert(obj)
 			client.close()
 		})
-		// worksheet.eachRow({ includeEmpty: false }, async (row, rowNum) => {
-		// 	const obj = {
-		// 		uid: row.values[1],
-		// 		content: row.values[2],
-		// 		comment_time: Date.now()
-		// 	}
-		// 	await db.collection('comments').insert(obj)
-		// 	client.close()
-		// })
 	})
 })()

@@ -85,11 +85,12 @@ router.get('/api/checked_in', async (ctx, next) => {
 	const obj = {}
 	let users = null
 	if (_.has(ctx.query, 'lasttime') && _.size(ctx.query) === 1) {
-		if (Number(ctx.query.lasttime) === 0) {
-			users = await User.find({ is_signin: 1 }, { _id: 0, uid: 1, name: 1, avatar: 1, signin_time: 1})
+		if (Number(ctx.query.lasttime) !== 0) {
+			users = await User.find({ is_signin: 1, is_shown: 0, signin_time: { $gte: ctx.query.lasttime }}, { _id: 0, uid: 1, name: 1, avatar: 1, signin_time: 1})
 		} else {
-			users = await User.find({ is_signin: 1, signin_time: { $gte: ctx.query.lasttime }}, { _id: 0, uid: 1, name: 1, avatar: 1, signin_time: 1})
+			users = await User.find({ is_signin: 1 }, { _id: 0, uid: 1, name: 1, avatar: 1, signin_time: 1})
 		}
+		await User.updateMany({ is_signin: 1 }, { $set: { is_shown: 1 }})
 		obj.data = users
 		obj.message = 'Operation successfully'
 		ctx.response.status = 200
@@ -100,7 +101,7 @@ router.get('/api/checked_in', async (ctx, next) => {
 	ctx.response.body = {
 		status: ctx.response.status,
 		message: obj.message,
-		data: obj.data ? obj.data : {}
+		data: obj.data === null ? [] : obj.data
 	}
 	await next()
 })

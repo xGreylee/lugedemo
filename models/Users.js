@@ -12,6 +12,10 @@ const UserSchema = new mongoose.Schema({
 		type: Number,
 		default: 0
 	},
+	is_shown: {
+		type: Number,
+		default: 0
+	},
 	signin_time: {
 		type: Date,
 		default: 0
